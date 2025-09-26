@@ -1,13 +1,553 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="./src/css/output.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jessica - Communicante & Voix-Off</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="./src/css/output.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        :root {
+            --color-primary: #8B5CF6; /* violet */
+            --color-secondary: #EC4899; /* rose-violacé */
+            --color-background-dark: #111827;
+            --color-surface-dark: #1F2937;
+            --color-background-light: #F9FAFB; /* gray-50 */
+            --color-surface-light: #FFFFFF;
+            --color-text-dark: #E5E7EB;
+            --color-text-light: #1F2937; /* gray-800 */
+            --color-text-muted-light: #6B7280; /* gray-500 */
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--color-background-light);
+            color: var(--color-text-light);
+        }
+        .text-gradient {
+            background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .bg-gradient-primary {
+            background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+        }
+        .hover-lift:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.2);
+        }
+        .glassmorphism {
+            background: rgba(31, 41, 55, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(3deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(3deg); }
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
 </head>
-<body>
-  <h1 class="text-3xl font-bold underline">
-    Hello world!
-  </h1>
+
+<body class="overflow-x-hidden">
+
+    <!-- Barre de Navigation (Dark) -->
+    <nav class="fixed top-0 left-0 right-0 z-50 py-4 glassmorphism transition-all duration-300" x-data="{ open: false }">
+        <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
+            <a href="#hero" class="text-2xl font-bold text-gradient flex-shrink-0">Atifoua Jessica KOFFI</a>
+            <!-- Menu Desktop -->
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#about" class="text-gray-300 hover:text-white transition">À Propos</a>
+                <a href="#services" class="text-gray-300 hover:text-white transition">Services</a>
+                <a href="#portfolio" class="text-gray-300 hover:text-white transition">Portfolio</a>
+                <a href="#voicework" class="text-gray-300 hover:text-white transition">Voix-Off</a>
+                <a href="#testimonials" class="text-gray-300 hover:text-white transition">Témoignages</a>
+                <a href="#contact" class="px-5 py-2 bg-gradient-primary text-white font-semibold rounded-full hover:opacity-90 transition-opacity">Contact</a>
+            </div>
+            <!-- Bouton Burger Mobile -->
+            <div class="md:hidden">
+                <button @click="open = !open" class="text-white focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path :class="{ 'hidden': open, 'inline-block': !open }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                        <path :class="{ 'hidden': !open, 'inline-block': open }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <!-- Menu Mobile -->
+        <div x-show="open" x-transition class="md:hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col items-center">
+                <a href="#about" @click="open = false" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">À Propos</a>
+                <a href="#services" @click="open = false" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Services</a>
+                <a href="#portfolio" @click="open = false" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Portfolio</a>
+                <a href="#voicework" @click="open = false" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Voix-Off</a>
+                <a href="#testimonials" @click="open = false" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Témoignages</a>
+                <a href="#contact" @click="open = false" class="mt-4 px-5 py-2 bg-gradient-primary text-white font-semibold rounded-full hover:opacity-90 transition-opacity">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Section Hero (Dark) -->
+    <header id="hero" class="relative min-h-screen flex items-center overflow-hidden" style="background-color: var(--color-background-dark);">
+        <div class="max-w-7xl mx-auto px-4 w-full pt-28 pb-20 md:pt-0 md:pb-0">
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <!-- Colonne Texte -->
+                <div class="text-center md:text-left" data-aos="fade-right">
+                    <p class=" text-lg sm:text-xl md:text-2xl text-gray-300 mb-4">
+                        Hello, <br>Je suis
+                    </p>
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight text-white">
+                        Atifoua Jessica KOFFI, <span class="text-gradient">la Voix</span> de vos Projets
+                    </h1>
+                    <h2 id="typing-text" class="text-lg sm:text-xl md:text-2xl font-light text-gray-300 min-h-[2.5rem] mt-4"></h2>
+                    <p class="mt-4 text-base sm:text-lg md:text-xl max-w-xl mx-auto md:mx-0 text-gray-400">
+                        Communicante passionnée et voix-off professionnelle, je transforme vos idées en messages percutants.
+                    </p>
+                    <a href="#portfolio" class="inline-block mt-8 px-8 sm:px-10 py-3 sm:py-4 bg-gradient-primary text-white font-bold rounded-full shadow-lg transform hover:scale-105 transition-all duration-300">
+                        Découvrir mon travail
+                    </a>
+                </div>
+                <!-- Colonne Image -->
+                <div class="relative flex items-center justify-center order-first md:order-last" data-aos="fade-left">
+                    <div class="absolute w-full h-full max-w-sm sm:max-w-md bg-violet-500 rounded-full filter blur-3xl opacity-20"></div>
+                    <img src="./src/img/jessica.jpg" alt="Jessica" class="relative z-10 w-full max-w-sm sm:max-w-md rounded-3xl shadow-2xl animate-float">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Le reste du contenu reste inchangé... -->
+
+    <!-- Section À Propos (Light) -->
+    <section id="about" class="py-20 md:py-32 px-4 md:px-8 bg-white">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-16 ">
+            <div class="w-full md:w-1/2" data-aos="fade-right">
+                <div class="relative">
+                    <div class="absolute -top-4 -left-4 w-full h-full bg-gradient-primary rounded-3xl transform -rotate-3"></div>
+                    <img src="./src/img/jessica-about2.jpg" alt="Jessica au travail" class="relative rounded-3xl shadow-2xl transform hover:scale-105 transition-transform duration-300">
+                </div>
+            </div>
+            <div class="w-full md:w-1/2 space-y-6" data-aos="fade-left">
+                <h3 class="text-4xl md:text-5xl font-bold"><span class="text-gradient">Qui suis-je ?</span></h3>
+                <p class="text-lg text-gray-700">
+                    Tisseuse d’histoires, animée par l’envie de transformer une idée en une voix qui captive et inspire, ma mission est de donner vie à votre vision avec une communication authentique et une voix qui marque les esprits.
+                </p>
+                <p class="text-lg text-gray-500">
+                    Passionnée par les mots et les émotions, je collabore avec des marques et des créateurs pour produire des contenus qui résonnent.
+                </p>
+                <a href="./src/doc/cv_atifoua_jessica_koffi.pdf" download="cv_atifoua_jessica_koffi.pdf" id="cvDownloadBtn" class="inline-block text-center px-10 py-4 bg-gradient-primary text-white font-bold rounded-full shadow-lg transform hover:scale-105 transition-all duration-300">
+                    Télécharger mon CV
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Compétences -->
+<section id="skills" class="py-20 md:py-32 bg-gray-50 px-4 md:px-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Titre de la section -->
+        <div class="text-center mb-20">
+            <h3 class="text-4xl md:text-5xl font-bold text-gradient" data-aos="fade-up">Mes Compétences</h3>
+            <p class="mt-4 text-lg text-gray-600" data-aos="fade-up" data-aos-delay="100">
+                Les outils et compétences que je mets à votre service.
+            </p>
+        </div>
+
+        <!-- Partie Communication -->
+        <div class="mb-20">
+            <h4 class="text-3xl font-bold text-gray-800 mb-10 text-center" data-aos="fade-up">
+                <span class="inline-flex items-center">
+                    <svg class="w-8 h-8 mr-4 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2V4a2 2 0 012-2h8a2 2 0 012 2v4z"></path></svg>
+                    Communication
+                </span>
+            </h4>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                <!-- Card Stratégie -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg text-center transform transition-all duration-300 hover-lift" data-aos="fade-up">
+                    <div class="w-16 h-16 bg-gradient-to-br from-violet-100 to-pink-100 text-violet-600 rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    </div>
+                    <h5 class="text-lg font-bold text-gray-800">Stratégie</h5>
+                </div>
+                <!-- Card Réseaux Sociaux -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg text-center transform transition-all duration-300 hover-lift" data-aos="fade-up" data-aos-delay="100">
+                     <div class="w-16 h-16 bg-gradient-to-br from-violet-100 to-pink-100 text-violet-600 rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.653-.124-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.653.124-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    </div>
+                    <h5 class="text-lg font-bold text-gray-800">Réseaux Sociaux</h5>
+                </div>
+                <!-- Card Création de Contenu -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg text-center transform transition-all duration-300 hover-lift" data-aos="fade-up" data-aos-delay="200">
+                     <div class="w-16 h-16 bg-gradient-to-br from-violet-100 to-pink-100 text-violet-600 rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    </div>
+                    <h5 class="text-lg font-bold text-gray-800">Création de Contenu</h5>
+                </div>
+                <!-- Card Outils de Design -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg text-center transform transition-all duration-300 hover-lift" data-aos="fade-up" data-aos-delay="300">
+                     <div class="w-16 h-16 bg-gradient-to-br from-violet-100 to-pink-100 text-violet-600 rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
+                    </div>
+                    <h5 class="text-lg font-bold text-gray-800">Canva & Suite Adobe</h5>
+                </div>
+            </div>
+        </div>
+
+        <!-- Partie Voix-Off -->
+        <div>
+            <h4 class="text-3xl font-bold text-gray-800 mb-10 text-center" data-aos="fade-up">
+                 <span class="inline-flex items-center">
+                    <svg class="w-8 h-8 mr-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
+                    Voix-Off
+                </span>
+            </h4>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                <!-- Card Technique Vocale -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg text-center transform transition-all duration-300 hover-lift" data-aos="fade-up">
+                    <div class="w-16 h-16 bg-gradient-to-br from-violet-100 to-pink-100 text-pink-600 rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.636 5.636a9 9 0 0112.728 0M8.464 15.536a5 5 0 01-7.072 0"></path></svg>
+                    </div>
+                    <h5 class="text-lg font-bold text-gray-800">Technique Vocale</h5>
+                </div>
+                <!-- Card Enregistrement -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg text-center transform transition-all duration-300 hover-lift" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-16 h-16 bg-gradient-to-br from-violet-100 to-pink-100 text-pink-600 rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
+                    </div>
+                    <h5 class="text-lg font-bold text-gray-800">Enregistrement Studio</h5>
+                </div>
+                <!-- Card Narration -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg text-center transform transition-all duration-300 hover-lift" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-16 h-16 bg-gradient-to-br from-violet-100 to-pink-100 text-pink-600 rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v11.494m-5.243-7.494H5.5a1 1 0 00-1 1v3a1 1 0 001 1h2.253m5.243-7.494h1.25a1 1 0 011 1v3a1 1 0 01-1 1h-1.25M12 6.253V5.5A2.25 2.25 0 009.75 3.25H4.5A2.25 2.25 0 002.25 5.5v13A2.25 2.25 0 004.5 20.75h5.25A2.25 2.25 0 0012 18.5v-.753"></path></svg>
+                    </div>
+                    <h5 class="text-lg font-bold text-gray-800">Narration & Doublage</h5>
+                </div>
+                <!-- Card Logiciels -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg text-center transform transition-all duration-300 hover-lift" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-16 h-16 bg-gradient-to-br from-violet-100 to-pink-100 text-pink-600 rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 6l12-3"></path></svg>
+                    </div>
+                    <h5 class="text-lg font-bold text-gray-800">Adobe Audition & Audacity</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- Section Services (Light) -->
+    <section id="services" class="py-20 md:py-32 bg-white px-4 md:px-8">
+        <div class="max-w-7xl mx-auto text-center">
+            <h3 class="text-4xl md:text-5xl font-bold text-gradient" data-aos="fade-up">Mes Services</h3>
+            <p class="mt-4 text-lg text-gray-600" data-aos="fade-up" data-aos-delay="100">
+                Des solutions sur-mesure pour amplifier votre message.
+            </p>
+            <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <!-- Service 1 -->
+                <div class="bg-gray-50 p-8 rounded-2xl shadow-lg transform transition-all duration-300 hover-lift" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mb-6 mx-auto">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-2.236 9.168-5.518"></path></svg>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-3 text-gray-800">Stratégie de Communication</h4>
+                    <p class="text-gray-600">Définition de votre message, de votre audience et des canaux pour un impact maximal.</p>
+                </div>
+                <!-- Service 2 -->
+                <div class="bg-gray-50 p-8 rounded-2xl shadow-lg transform transition-all duration-300 hover-lift" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mb-6 mx-auto">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-3 text-gray-800">Voix-Off Professionnelle</h4>
+                    <p class="text-gray-600">Publicités, documentaires, e-learning... Une voix claire et captivante pour tous vos projets.</p>
+                </div>
+                <!-- Service 3 -->
+                <div class="bg-gray-50 p-8 rounded-2xl shadow-lg transform transition-all duration-300 hover-lift" data-aos="fade-up" data-aos-delay="400">
+                    <div class="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mb-6 mx-auto">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-3 text-gray-800">Création de Contenu</h4>
+                    <p class="text-gray-600">Rédaction d'articles, scripts, et contenus pour les réseaux sociaux qui engagent votre audience.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Portfolio (Light) -->
+    <section id="portfolio" class="py-20 md:py-32 bg-gray-50 px-4 md:px-8">
+        <div class="max-w-7xl mx-auto text-center">
+            <h3 class="text-4xl md:text-5xl font-bold text-gradient" data-aos="fade-up">Mes Réalisations</h3>
+            <p class="mt-4 text-lg text-gray-600" data-aos="fade-up" data-aos-delay="100">
+                Un aperçu de mon travail en communication et voix-off.
+            </p>
+            <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <!-- Projet 1 -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden transform transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl" data-aos="fade-up">
+                    <div class="w-full">
+                        <video src="./src/video/video1.mp4" class="w-full h-auto object-cover" controls></video>
+                    </div>
+                    <div class="p-6 text-left">
+                        <h4 class="text-xl font-bold text-gray-800">Sensibilisation à la sécurité numérique</h4>
+                        <p class="mt-2 text-gray-600">Communication visant à informer et éduquer les utilisateurs sur les bonnes pratiques de cybersécurité, afin de protéger leurs données et renforcer leur confiance en ligne.</p>
+                    </div>
+                </div>
+                <!-- Projet 2 -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden transform transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-full">
+                        <video src="./src/video/video2.mp4" class="w-full h-auto object-cover" controls></video>
+                    </div>
+                    <div class="p-6 text-left">
+                        <h4 class="text-xl font-bold text-gray-800">Changement d’identité : Togocom devient Yas</h4>
+                        <p class="mt-2 text-gray-600">Communication autour de la nouvelle identité de marque, visant à accompagner le public dans la transition, renforcer la notoriété de Yas et créer une adhésion positive autour de ce repositionnement.</p>
+                    </div>
+                </div>
+                <!-- Projet 3 -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden transform transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl" data-aos="fade-up" data-aos-delay="400">
+                    <div class="w-full">
+                        <video src="./src/video/video3.mp4" class="w-full h-auto object-cover" controls></video>
+                    </div>
+                    <div class="p-6 text-left">
+                        <h4 class="text-xl font-bold text-gray-800">Guinness World Records : Le Marathon culinaire du Togo</h4>
+                        <p class="mt-2 text-gray-600">Campagne de communication autour d’un événement unique visant à inscrire le Togo dans le Guinness World Records grâce à un marathon culinaire exceptionnel, célébrant la richesse gastronomique et culturelle du pays.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Voix-Off (Light) -->
+    <section id="voicework" class="py-20 md:py-32 bg-white px-4 md:px-8">
+        <div class="max-w-6xl mx-auto text-center">
+            <h3 class="text-4xl md:text-5xl font-bold text-gradient" data-aos="fade-up">Ma Voix, Votre Signature</h3>
+            <p class="mt-4 text-lg text-gray-600" data-aos="fade-up" data-aos-delay="100">
+                Découvrez mon univers vocal à travers ces extraits.
+            </p>
+            <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Extrait 1 -->
+                <div class="bg-gray-50 p-6 rounded-2xl shadow-lg" data-aos="fade-up" data-aos-delay="200">
+                    <h4 class="text-xl font-bold text-gray-800 mb-2">Sensibilisation e-ID Togo</h4>
+                    <p class="text-gray-500 mb-4 text-sm">Ton dynamique et chaleureux</p>
+                    <audio controls class="w-full">
+                        <source src="./src/audio/audio1.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+                <!-- Extrait 2 -->
+                <div class="bg-gray-50 p-6 rounded-2xl shadow-lg" data-aos="fade-up" data-aos-delay="300">
+                    <h4 class="text-xl font-bold text-gray-800 mb-2">Publicité offres Moov Africa</h4>
+                    <p class="text-gray-500 mb-4 text-sm">Voix posée et immersive</p>
+                    <audio controls class="w-full">
+                        <source src="./src/audio/audio2.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+                <!-- Extrait 3 -->
+                <div class="bg-gray-50 p-6 rounded-2xl shadow-lg" data-aos="fade-up" data-aos-delay="400">
+                    <h4 class="text-xl font-bold text-gray-800 mb-2">Service client de Yas</h4>
+                    <p class="text-gray-500 mb-4 text-sm">Interprétation et personnages</p>
+                    <audio controls class="w-full">
+                        <source src="./src/audio/audio3.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Témoignages (Light) -->
+    <section id="testimonials" class="py-20 md:py-32 px-4 md:px-8">
+        <div class="max-w-4xl mx-auto text-center"
+             x-data="{
+                testimonials: [
+                    {
+                        quote: 'La voix de Jessica a apporté une dimension incroyable à notre projet. Professionnelle, à l\'écoute et incroyablement talentueuse. Nous la recommandons vivement !',
+                        author: 'Jean GBABLA',
+                        title: 'Directeur Artistique, Agence Créa'
+                    },
+                    {
+                        quote: 'Jessica a une capacité rare à comprendre l\'essence d\'une marque et à la traduire avec une voix juste et percutante. Travailler avec elle a été un plaisir.',
+                        author: 'Marie ALADE',
+                        title: 'CEO, Startup Innovante'
+                    },
+                    {
+                        quote: 'Le podcast que Jessica a produit pour nous a dépassé toutes nos attentes. Son professionnalisme et sa créativité sont sans égal.',
+                        author: 'Paul AMENOU',
+                        title: 'Responsable Marketing, Tech Corp'
+                    }
+                ],
+                activeIndex: 0,
+                autoplay: null,
+                startAutoplay() {
+                    this.autoplay = setInterval(() => {
+                        this.activeIndex = (this.activeIndex + 1) % this.testimonials.length;
+                    }, 5000);
+                },
+                stopAutoplay() {
+                    clearInterval(this.autoplay);
+                }
+             }"
+             x-init="startAutoplay()">
+
+            <h3 class="text-4xl md:text-5xl font-bold text-gradient" data-aos="fade-up">Ce qu'ils en disent</h3>
+
+            <div class="mt-12 relative h-64" data-aos="fade-up" data-aos-delay="200" @mouseenter="stopAutoplay" @mouseleave="startAutoplay">
+                <template x-for="(testimonial, index) in testimonials" :key="index">
+                    <div x-show="activeIndex === index"
+                         x-transition:enter="transition ease-out duration-500"
+                         x-transition:enter-start="opacity-0 transform translate-y-4"
+                         x-transition:enter-end="opacity-100 transform translate-y-0"
+                         x-transition:leave="transition ease-in duration-300"
+                         x-transition:leave-start="opacity-100"
+                         x-transition:leave-end="opacity-0"
+                         class="absolute inset-0">
+                        <div class="p-10 bg-white rounded-2xl shadow-xl border border-gray-100 h-full flex flex-col justify-center">
+                            <p class="text-xl italic text-gray-700" x-text="testimonial.quote"></p>
+                            <div class="mt-6">
+                                <p class="font-bold text-lg text-gray-900" x-text="testimonial.author"></p>
+                                <p class="text-sm text-violet-500" x-text="testimonial.title"></p>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+            
+            <!-- Navigation Dots -->
+            <div class="mt-8 flex justify-center space-x-3">
+                <template x-for="(testimonial, index) in testimonials" :key="index">
+                    <button @click="activeIndex = index; stopAutoplay(); startAutoplay();"
+                            :class="{ 'bg-violet-500': activeIndex === index, 'bg-gray-300': activeIndex !== index }"
+                            class="w-3 h-3 rounded-full hover:bg-violet-400 transition-colors"></button>
+                </template>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Contact -->
+<section id="contact" class="py-20 md:py-32 bg-gray-50 px-4 md:px-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Titre de la section -->
+        <div class="text-center mb-20">
+            <h3 class="text-4xl md:text-5xl font-bold text-gradient" data-aos="fade-up">Collaborons Ensemble</h3>
+            <p class="mt-4 text-lg text-gray-600" data-aos="fade-up" data-aos-delay="100">
+                Une idée, un projet ? Contactez-moi pour en discuter.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- Carte Formulaire -->
+            <div class="bg-white p-8 rounded-2xl shadow-lg" data-aos="fade-right">
+                <h4 class="text-2xl font-bold text-gray-800 mb-6">Envoyez-moi un message</h4>
+                <form id="contactForm" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <input type="text" name="firstname" class="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-lg focus:ring-2 focus:ring-violet-500 outline-none transition" placeholder="Prénom" required>
+                        <input type="text" name="lastname" class="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-lg focus:ring-2 focus:ring-violet-500 outline-none transition" placeholder="Nom" required>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <input type="email" name="email" class="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-lg focus:ring-2 focus:ring-violet-500 outline-none transition" placeholder="Email" required>
+                        <input type="tel" name="phone" class="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-lg focus:ring-2 focus:ring-violet-500 outline-none transition" placeholder="Téléphone">
+                    </div>
+                    <div>
+                        <select name="subject" class="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-lg focus:ring-2 focus:ring-violet-500 outline-none transition">
+                            <option value="devis">Demande de devis</option>
+                            <option value="projet">Proposition de projet</option>
+                            <option value="autre">Autre</option>
+                        </select>
+                    </div>
+                    <div>
+                        <textarea name="message" rows="5" class="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-lg focus:ring-2 focus:ring-violet-500 outline-none transition" placeholder="Votre message..." required></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="px-10 py-4 bg-gradient-primary text-white font-bold rounded-full shadow-lg transform hover:scale-105 transition-all duration-300">
+                            Envoyer le message
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Carte Informations & Carte Google Maps -->
+            <div class="space-y-8" data-aos="fade-left">
+                <div class="bg-white p-8 rounded-2xl shadow-lg">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-6">Informations de Contact</h4>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <svg class="w-6 h-6 text-violet-500 mr-4 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            <div>
+                                <h5 class="font-bold">Adresse</h5>
+                                <p class="text-gray-600">Nukafu Lome-Togo</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <svg class="w-6 h-6 text-violet-500 mr-4 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                            <div>
+                                <h5 class="font-bold">Téléphone</h5>
+                                <p class="text-gray-600">+228 71 67 61 31</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <svg class="w-6 h-6 text-violet-500 mr-4 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            <div>
+                                <h5 class="font-bold">Email</h5>
+                                <p class="text-gray-600">atifouaJessicakoffi@gmail.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7933.567791293852!2d1.2286571545828273!3d6.1596909!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1023e22482664a47%3A0x8464b4a8a60f1c92!2sMarch%C3%A9%20de%20Nukafu!5e0!3m2!1sfr!2stg!4v1758879182597!5m2!1sfr!2stg" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer (Dark) - Amélioré v2 -->
+<footer class="py-16 px-4 text-white" style="background-color: var(--color-background-dark);" data-aos="fade-up" data-aos-offset="0">
+    <div class="max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            
+            <!-- Colonne 1: À propos -->
+            <div class="lg:col-span-2">
+                <h3 class="text-2xl font-bold text-gradient mb-4">Atifoua Jessica KOFFI</h3>
+                <p class="text-gray-400 max-w-md">
+                    Communicante passionnée et voix-off professionnelle, je transforme vos idées en messages percutants.
+                </p>
+            </div>
+
+            <!-- Colonne 2: Liens rapides -->
+            <div>
+                <h4 class="text-lg font-semibold text-white mb-6">Navigation</h4>
+                <ul class="space-y-4">
+                    <li><a href="#about" class="text-gray-400 hover:text-violet-400 transition-all duration-300 transform hover:-translate-y-0.5 block">À Propos</a></li>
+                    <li><a href="#services" class="text-gray-400 hover:text-violet-400 transition-all duration-300 transform hover:-translate-y-0.5 block">Services</a></li>
+                    <li><a href="#portfolio" class="text-gray-400 hover:text-violet-400 transition-all duration-300 transform hover:-translate-y-0.5 block">Portfolio</a></li>
+                    <li><a href="#contact" class="text-gray-400 hover:text-violet-400 transition-all duration-300 transform hover:-translate-y-0.5 block">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Colonne 3: Réseaux Sociaux -->
+            <div>
+                <h4 class="text-lg font-semibold text-white mb-6">Restons Connectés</h4>
+                <div class="flex space-x-4">
+                    <a href="https://www.linkedin.com/in/atifoua-jessica-koffi-43107630b/" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-gradient-primary transition-all duration-300 transform hover:scale-110" aria-label="LinkedIn">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-gradient-primary transition-all duration-300 transform hover:scale-110" aria-label="Twitter">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-.424.727-.666 1.581-.666 2.477 0 1.61.82 3.027 2.07 3.868-.76-.025-1.475-.232-2.104-.577v.062c0 2.248 1.605 4.125 3.737 4.568-.39.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.307 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.063 1.328 4.526 2.104 7.177 2.104 8.607 0 13.328-7.14 13.328-13.328 0-.202-.005-.403-.014-.602.918-.664 1.716-1.49 2.345-2.433z"/></svg>
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-gradient-primary transition-all duration-300 transform hover:scale-110" aria-label="Instagram">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.012 3.584-.07 4.85c-.148 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.012-3.584.07-4.85c.148-3.225 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.85-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44 1.441-.645 1.441-1.44-.645-1.44-1.441-1.44z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="mt-16 border-t border-gray-800 pt-8 text-center">
+            <p class="text-gray-500">&copy; 2025 Atifoua Jessica KOFFI. Tous droits réservés.</p>
+        </div>
+    </div>
+</footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="./src/js/main.js"></script>
 </body>
 </html>
